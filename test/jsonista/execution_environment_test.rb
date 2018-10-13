@@ -11,5 +11,13 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
     it "has no local variables defined" do
       result.local_variables.must_be_empty
     end
+
+    it "always returns different instances" do
+      result.wont_equal( Jsonista::ExecutionEnvironment.get )
+    end
+
+    it "is not nested in a module" do
+      result.eval("Module.nesting").must_equal( [] )
+    end
   end
 end
