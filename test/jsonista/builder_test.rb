@@ -114,5 +114,74 @@ class Jsonista::BuilderTest < Minitest::Spec
       end
     end
 
+    describe "when passed a symbol" do
+      let(:structure) { :foo }
+
+      it 'resutns the serialized string representation of the symbol' do
+        result.must_equal( '"foo"' )
+      end
+    end
+
+    describe "when passed an empty array" do
+      let(:structure) { [] }
+
+      it 'returns the serialized array' do
+        result.must_equal( '[]' )
+      end
+    end
+
+    describe "when passed an array with content" do
+      let(:structure) { [ 1, 2, 3 ] }
+
+      it 'returns the serialized array' do
+        result.must_equal( '[1,2,3]' )
+      end
+    end
+
+    describe "when passed an empty hash" do
+      let(:structure) { {} }
+
+      it 'returns the serialized hash' do
+        result.must_equal( '{}' )
+      end
+    end
+
+    describe "when passed a hash with content" do
+      let(:structure) do
+        { "x" => 1, "y" => 2 }
+      end
+
+      it 'returns the serialized array' do
+        result.must_equal( '{"x":1,"y":2}' )
+      end
+    end
+
+    describe "when passed a nested structure" do
+      let(:structure) do
+        { :null              => nil,
+          "true"             => true,
+          "false"            => false,
+          :integer           => 1,
+          :array_of_integers => [ 1, 2, 3 ],
+          :array_of_strings  => %w[ foo bar baz ],
+          :array_of_hashes   => [ { :x => 1 }, { :x => 2 } ],
+          :subhash           => { :foo => :bar } }
+      end
+      let(:expected_result) do
+        %|{"null":null,"true":true,"false":false,"integer":1,"array_of_integers":[1,2,3],"array_of_strings":["foo","bar","baz"],"array_of_hashes":[{"x":1},{"x":2}],"subhash":{"foo":"bar"}}|
+      end
+
+      it 'returns the expected serialization' do
+        result.must_equal( expected_result )
+      end
+    end
+
+    describe "when passed an unknown object" do
+      let(:structure) { Object.new }
+
+      it 'raises an error' do
+        lambda { result }.must_raise( Jsonista::SerializationError )
+      end
+    end
   end
 end
