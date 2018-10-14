@@ -56,7 +56,7 @@ module Jsonista
                                end
 
       template_body = options[:string] || File.read( resolved_template_file )
-      Compiler.new( template_body, resolved_template_file ).compile
+      Compiler.new( template_body, resolved_template_file ).compile( options[:locals] )
     end
     module_function :render
   end

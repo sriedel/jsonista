@@ -30,5 +30,22 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
     it "must has a cache top level function" do
       result.eval("public_methods").must_include( :cache )
     end
+
+    describe "when a hash of local variables to set is passed" do
+      let(:result) { Jsonista::ExecutionEnvironment.get( local_variables ) }
+      let(:local_variables) do
+        { :x => 1,
+          :y => 2 }
+      end
+
+      it "sets the variables" do
+        result.local_variables.sort.must_equal( local_variables.keys.sort )
+      end
+
+      it "has the variables set up with the given values" do
+        result.eval( "x" ).must_equal( local_variables[:x] )
+        result.eval( "y" ).must_equal( local_variables[:y] )
+      end
+    end
   end
 end

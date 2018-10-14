@@ -2,9 +2,17 @@ require 'byebug'
 
 module Jsonista
   class ExecutionEnvironment
-    def self.get
+    def self.get( local_variable_hash = nil )
       @environment ||= build_new_environment
-      @environment.dup
+      environment = @environment.dup
+
+      if local_variable_hash
+        local_variable_hash.each_pair do |name, value|
+          environment.local_variable_set( name, value )
+        end
+      end
+
+      environment
     end
   end
 end
