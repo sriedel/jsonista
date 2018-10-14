@@ -46,28 +46,19 @@ module Jsonista
         raise NoTemplateError.new( "Must give only one of file argument, or one of the options :partial, :template, or :string" )
       end
 
-      return options[:string] if options[:string]
+      resolved_template_file = if file
+                                 file
+                               elsif options[:string]
+                                 "(inline template)"
+                               else
+                                 template_file = options[:partial] || options[:template]
+                                 resolver = TemplateResolver.new( template_file, caller_locations[0]&.path, is_partial: options[:partial] )
+                                 resolver.template_path
+                               end
 
-      template_file = file || options[:partial] || options[:template]
-
-      template_body = if options[:partial]
-                        resolver = TemplateResolver.new( template_file, caller_locations[0]&.path, is_partial: true )
-                        File.read( resolver.template_path )
-
-                      elsif options[:template]
-                        resolver = TemplateResolver.new( template_file, caller_locations[0]&.path, is_partial: false )
-                        File.read( resolver.template_path )
-
-                      elsif options[:string]
-                        options[:string]
-
-                      elsif file
-                          File.read( file )
-
-                      else
-                        raise NoTemplateError.new( "Must give either a filename as first parameter, or a :partial, :template or :string option" )
-                      end
-      Builder.new( template_body ).build
+      template_body = options[:string] || File.read( resolved_template_file )
+      structure = Compiler.new( template_body, resolved_template_file ).compile
+      Serializer.new.serialize( structure )
     end
     module_function :render
   end

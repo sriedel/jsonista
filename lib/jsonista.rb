@@ -6,6 +6,6 @@ module Jsonista
 end
 
 require_relative 'jsonista/execution_environment'
-require_relative 'jsonista/builder'
+require_relative 'jsonista/serializer'
 require_relative 'jsonista/compiler'
 require_relative 'jsonista/render'

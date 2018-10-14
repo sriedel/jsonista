@@ -1,16 +1,9 @@
 module Jsonista
-  class Builder
-    attr_reader :serialized_string, :template_body
+  class Serializer
+    attr_reader :serialized_string
 
-    def initialize( template_body, serialized_string = '' )
-      @template_body = template_body
+    def initialize( serialized_string = '' )
       @serialized_string = serialized_string
-    end
-
-    def build
-      compiler = Compiler.new( template_body )
-      evaluated_structure = compiler.compile
-      serialize(evaluated_structure)
     end
 
     def serialize(structure)

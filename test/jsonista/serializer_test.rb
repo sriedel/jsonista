@@ -1,17 +1,12 @@
 require 'test_helper'
 require 'minitest/autorun'
 
-class Jsonista::BuilderTest < Minitest::Spec
-  let(:template_body) { '12.3' }
-  subject { Jsonista::Builder.new( template_body ) }
+class Jsonista::SerializerTest < Minitest::Spec
+  subject { Jsonista::Serializer.new }
 
   describe 'the initializer' do
-    it 'sets the template_body' do
-      subject.template_body.must_equal( template_body )
-    end
-
     describe 'when no serialized_string is given' do 
-      subject { Jsonista::Builder.new( template_body ) }
+      subject { Jsonista::Serializer.new }
 
       it 'sets serialized_string to an empty string' do
         subject.serialized_string.must_equal( '' )
@@ -20,21 +15,10 @@ class Jsonista::BuilderTest < Minitest::Spec
 
     describe 'when a serialized_string is given' do
       let(:serialized_string) { 'foo' }
-      subject { Jsonista::Builder.new( template_body, serialized_string ) }
+      subject { Jsonista::Serializer.new( serialized_string ) }
 
       it 'should set the serialized string to the given string' do
         subject.serialized_string.object_id.must_equal( serialized_string.object_id )
-      end
-    end
-  end
-
-  describe '#build' do
-    describe 'when the template contained nil' do
-      let(:template_value) { nil }
-      let(:template_body)  { "#{template_value.inspect}" }
-
-      it 'should return a json nil' do
-        subject.build.must_equal( template_value.to_json )
       end
     end
   end

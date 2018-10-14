@@ -8,7 +8,7 @@ module Jsonista
     end
 
     def compile
-      ExecutionEnvironment.get.eval( @template_body, @file_name )
+      ExecutionEnvironment.get.eval( @template_body, @file_name || "(unknown)" )
     end
   end
 end
