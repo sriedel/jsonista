@@ -19,5 +19,13 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
     it "is not nested in a module" do
       result.eval("Module.nesting").must_equal( [] )
     end
+
+    it "must have a render top level function" do
+      result.eval("public_methods").must_include( :render )
+    end
+
+    it "must has a cache top level function" do
+      result.eval("public_methods").must_include( :cache )
+    end
   end
 end

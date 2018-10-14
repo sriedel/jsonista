@@ -1,6 +1,9 @@
 JSONISTA_BINDING = Object.new.instance_eval do
-                     def render_partial
+                     def render
                        "Render partial called"
+                     end
+
+                     def cache
                      end
                      binding
                    end
