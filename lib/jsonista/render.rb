@@ -5,40 +5,30 @@ module Jsonista
       options ||= {}
       file = args[0]
 
+      if ![ file, options[:partial], options[:template], options[:string] ].one?
+        raise NoTemplateError.new( "Must give only one of file argument, or one of the options :partial, :template, or :string" )
+      end
+
       template_body = if options[:partial]
-                        if file
-                          warn "Both file (#{file.inspect}) and partial (#{options[:partial].inspect}) given, proceeding with file"
-                        else
-                          path = File.split( options[:partial] )
-                          path[-1] = "_#{path[-1]}"
-                          path[-1] << ".jsonista" unless path[-1].end_with?( ".jsonista" )
-                          file = File.join( path )
-                        end
+                        path = File.split( options[:partial] )
+                        path[-1] = "_#{path[-1]}"
+                        path[-1] << ".jsonista" unless path[-1].end_with?( ".jsonista" )
+                        file = File.join( path )
                         File.read( file )
 
                       elsif options[:template]
-                        if file
-                          warn "Both file (#{file.inspect}) and template (#{options[:template].inspect}) given, proceeding with file"
-                        else
-                          file = options[:template] 
-                          file << ".jsonista" unless file.end_with?( ".jsonista" )
-                        end
+                        file = options[:template] 
+                        file << ".jsonista" unless file.end_with?( ".jsonista" )
                         File.read( file )
 
                       elsif options[:string]
-                        if file
-                          warn "Both file (#{file.inspect}) and template string given, proceeding with file"
-                          File.read(file)
-                        else
-                          options[:string]
-                        end
+                        options[:string]
+
+                      elsif file
+                          File.read( file )
 
                       else
-                        if file
-                          File.read( file )
-                        else
-                          raise NoTemplateError.new( "Must give either a filename as first parameter, or a :partial, :template or :string option" )
-                        end
+                        raise NoTemplateError.new( "Must give either a filename as first parameter, or a :partial, :template or :string option" )
                       end
       Builder.new( template_body ).build
     end

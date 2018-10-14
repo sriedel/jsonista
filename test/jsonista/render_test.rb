@@ -19,20 +19,26 @@ class Jsonista::RenderTest < Minitest::Spec
 
       describe "when giving a file as parameter" do
         describe "and also giving a :partial option" do
-          it 'renders the contents of the template given by the file' do
-            Jsonista::Render.render( file_param, :partial => partial_param ).must_equal( %{"file"} )
+          it 'raises an error' do
+            lambda do
+              Jsonista::Render.render( file_param, :partial => partial_param )
+            end.must_raise( Jsonista::NoTemplateError )
           end
         end
 
         describe "and also giving a :template option" do
-          it 'renders the contents of the template given by the file' do
-            Jsonista::Render.render( file_param, :template => template_param ).must_equal( %{"file"} )
+          it 'raises an error' do
+            lambda do
+              Jsonista::Render.render( file_param, :template => template_param )
+            end.must_raise( Jsonista::NoTemplateError )
           end
         end
 
         describe "and also giving a :string option" do
-          it 'renders the contents of the template given by the file' do
-            Jsonista::Render.render( file_param, :string => string_param ).must_equal( %{"file"} )
+          it 'raises an error' do
+            lambda do
+              Jsonista::Render.render( file_param, :string => string_param )
+            end.must_raise( Jsonista::NoTemplateError )
           end
         end
 
