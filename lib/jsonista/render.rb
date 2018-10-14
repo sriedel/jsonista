@@ -1,5 +1,7 @@
 module Jsonista
   module Render
+    TEMPLATE_FILE_EXTENSION = ".jsonista".freeze
+
     def render( *args )
       options = args.pop if args.dig(-1).is_a?( Hash )
       options ||= {}
@@ -12,13 +14,13 @@ module Jsonista
       template_body = if options[:partial]
                         path = File.split( options[:partial] )
                         path[-1] = "_#{path[-1]}"
-                        path[-1] << ".jsonista" unless path[-1].end_with?( ".jsonista" )
+                        path[-1] << TEMPLATE_FILE_EXTENSION unless path[-1].end_with?( TEMPLATE_FILE_EXTENSION )
                         file = File.join( path )
                         File.read( file )
 
                       elsif options[:template]
                         file = options[:template] 
-                        file << ".jsonista" unless file.end_with?( ".jsonista" )
+                        file = file + TEMPLATE_FILE_EXTENSION unless file.end_with?( TEMPLATE_FILE_EXTENSION )
                         File.read( file )
 
                       elsif options[:string]
