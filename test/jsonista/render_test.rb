@@ -27,7 +27,7 @@ class Jsonista::RenderTest < Minitest::Spec
     describe "when rendering a template" do
       describe "and the intended file exists" do
         describe "and the given filename includes the template file extension" do
-          let(:template_param) { File.join( fixture_path, "template_param_template#{Jsonista::Render::TEMPLATE_FILE_EXTENSION}" ) }
+          let(:template_param) { File.join( fixture_path, "template_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
             Jsonista::Render.render( :template => template_param ).must_equal( %{"template"} )
@@ -55,7 +55,7 @@ class Jsonista::RenderTest < Minitest::Spec
     describe "when rendering a partial" do
       describe "and the intended file exists" do
         describe "and the given filename includes the template file extension" do
-          let(:partial_param) { File.join( fixture_path, "partial_param_template#{Jsonista::Render::TEMPLATE_FILE_EXTENSION}" ) }
+          let(:partial_param) { File.join( fixture_path, "partial_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
             Jsonista::Render.render( :partial => partial_param ).must_equal( %{"partial"} )
