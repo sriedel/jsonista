@@ -1,6 +1,6 @@
 { :key_1 => :value_in_main_template,
   :key_2 => render( :partial => "partial_with_value" ),
-  :key_3 => [1, 2, nil, "foo", :bar ].each { |x| 
+  :key_3 => [ 1, 2, nil, "foo", :bar ].each { |x| 
               render( :partial => "partial_with_evaluated_value", :locals => { :object => x } )
             }
 }
