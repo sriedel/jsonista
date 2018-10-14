@@ -21,7 +21,10 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
     end
 
     it "must have a render top level function" do
-      result.eval("public_methods").must_include( :render )
+      result.eval("render")
+    rescue Jsonista::NoTemplateError
+      # if this is raised, the method was called
+      true
     end
 
     it "must has a cache top level function" do

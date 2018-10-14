@@ -1,17 +1,24 @@
-JSONISTA_BINDING = Object.new.instance_eval do
-                     def render
-                       "Render partial called"
-                     end
-
-                     def cache
-                     end
-                     binding
-                   end
+require 'byebug'
 
 module Jsonista
   class ExecutionEnvironment
     def self.get
-      JSONISTA_BINDING.dup
+      @environment ||= build_new_environment
+      @environment.dup
+    end
+  end
+end
+
+Jsonista::ExecutionEnvironment.class_eval do
+  def self.build_new_environment
+    Object.allocate.instance_eval do
+      class << self
+        include Jsonista::Render
+      end
+
+      def cache
+      end
+      binding
     end
   end
 end
