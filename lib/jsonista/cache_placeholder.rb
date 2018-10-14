@@ -6,5 +6,9 @@ module Jsonista
       @key = key
       @cache_miss_block = cache_miss_block
     end
+
+    def resolve
+      'this value is cached'
+    end
   end
 end

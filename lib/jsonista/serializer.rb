@@ -32,6 +32,9 @@ module Jsonista
           end
           @serialized_string.chop! unless structure.empty?
           @serialized_string << "}"
+
+        when Jsonista::CachePlaceholder
+          @serialized_string << structure.resolve.to_json
         
         else
           raise SerializationError.new( "Don't know how to serialize an object of type #{structure.class} (context: #{@serialized_string[-200,200]}" )

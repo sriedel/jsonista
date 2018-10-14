@@ -140,6 +140,18 @@ class Jsonista::SerializerTest < Minitest::Spec
       end
     end
 
+    describe "when passed a Jsonista::CachePlaceholder" do
+      let(:cache_key) { "my cache key" }
+      let(:cache_miss_block) do
+        lambda { "x" }
+      end
+      let(:structure) { Jsonista::CachePlaceholder.new( cache_key, &cache_miss_block ) }
+
+      it 'returns the resolved cache value' do
+        result.must_equal( '"this value is cached"' )
+      end
+    end
+
     describe "when passed a nested structure" do
       let(:structure) do
         { :null              => nil,
