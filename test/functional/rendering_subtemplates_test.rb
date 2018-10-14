@@ -6,7 +6,8 @@ describe "Rendering a template that in turn renders partials" do
   let(:expected_result_structure) do
     { :key_1 => "value_in_main_template",
       :key_2 => "value_in_partial",
-      :key_3 => [ 1, 2, nil, "foo", :bar ] }
+      :key_3 => [ 1, 2, nil, "foo", :bar ],
+      :key_4 => [ 3.14, 4, 5, 6 ] }
   end
   let(:expected_result) { expected_result_structure.to_json }
 

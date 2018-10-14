@@ -3,36 +3,24 @@ module Jsonista
     class TemplateResolver
       TEMPLATE_FILE_EXTENSION = ".jsonista".freeze
 
+      attr_reader :template_filename
+
       def initialize( file, caller_path = nil, is_partial: false )
         @file = file
         @caller_path = caller_path
         @is_partial = is_partial
+        @template_dirname, @template_filename = File.split( @file )
       end
 
-      def template_path
-        if @is_partial
-          path = File.split( @file )
-          path[-1] = "_#{path[-1]}"
-          @file = File.join( path )
-        end
-        ensure_file_extension_is_present
-        expand_file_to_full_path
-      end
+      def full_template_path
+        return instance_variable_get( :@full_template_path ) if instance_variable_defined?( :@full_template_path )
 
-      private
+        filename = @is_partial ? "_#{template_filename}" : template_filename.dup
+        filename << TEMPLATE_FILE_EXTENSION unless filename.end_with?( TEMPLATE_FILE_EXTENSION )
 
-      def ensure_file_extension_is_present
-        @file << TEMPLATE_FILE_EXTENSION unless @file.end_with?( TEMPLATE_FILE_EXTENSION )
-      end
-
-      def expand_file_to_full_path
-        return @file if @file.start_with?( "/" )
-
-        caller_path = @caller_path || "."
-
-        caller_path_list = File.split( caller_path )
-        caller_path_list.pop
-        File.absolute_path( File.join( *caller_path_list, @file ) )
+         @template_dirname.start_with?( "/" ) ? 
+                                File.join( @template_dirname, filename) :
+                                File.absolute_path( File.join( File.dirname( @caller_path ), @template_dirname, filename ) )
       end
     end
 
@@ -52,11 +40,23 @@ module Jsonista
                                else
                                  template_file = options[:partial] || options[:template]
                                  resolver = TemplateResolver.new( template_file, caller_locations[0]&.path, is_partial: options[:partial] )
-                                 resolver.template_path
+                                 resolver.full_template_path
                                end
 
       template_body = options[:string] || File.read( resolved_template_file )
-      Compiler.new( template_body, resolved_template_file ).compile( options[:locals] )
+      
+      compiler = Compiler.new( template_body, resolved_template_file )
+      if options[:collection]
+        options[:collection].each do |collection_element|
+          local_variables = options[:locals] ? 
+                              options[:locals].merge( :instance => collection_element ) :
+                              { :instance => collection_element }
+          compiler.compile( local_variables )
+        end
+
+      else
+        compiler.compile( options[:locals] )
+      end
     end
     module_function :render
   end
