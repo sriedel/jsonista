@@ -27,8 +27,8 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
       true
     end
 
-    it "must has a cache top level function" do
-      result.eval("public_methods").must_include( :cache )
+    it "must have a cache top level function" do
+      result.eval("cache('key')")
     end
 
     describe "when a hash of local variables to set is passed" do

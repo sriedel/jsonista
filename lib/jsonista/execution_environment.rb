@@ -22,10 +22,9 @@ Jsonista::ExecutionEnvironment.class_eval do
     Object.allocate.instance_eval do
       class << self
         include Jsonista::Render
+        include Jsonista::Cache
       end
 
-      def cache
-      end
       binding
     end
   end
