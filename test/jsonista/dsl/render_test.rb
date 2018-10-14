@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Jsonista::RenderTest < Minitest::Spec
+class Jsonista::DSL::RenderTest < Minitest::Spec
   describe ".render" do
-    let(:fixture_path) { File.join( __dir__, "..", "fixtures" ) }
+    let(:fixture_path) { File.join( __dir__, "..", "..", "fixtures" ) }
     let(:file_param) { File.join( fixture_path, "file_param_template.jsonista" ) }
     let(:partial_param) { File.join( fixture_path, "partial_param_template" ) }
     let(:template_param) { File.join( fixture_path, "template_param_template" ) }
@@ -12,14 +12,14 @@ class Jsonista::RenderTest < Minitest::Spec
       describe "and the given file does not exist" do
         it "raises an exception" do
           lambda do
-            Jsonista::Render.render( "i_dont_exist" )
+            Jsonista::DSL::Render.render( "i_dont_exist" )
           end.must_raise( Errno::ENOENT )
         end
       end
 
       describe "and the given file exists" do
         it "returns the rendered template body from the file" do
-          Jsonista::Render.render( file_param ).must_equal( "file" )
+          Jsonista::DSL::Render.render( file_param ).must_equal( "file" )
         end
       end
     end
@@ -27,10 +27,10 @@ class Jsonista::RenderTest < Minitest::Spec
     describe "when rendering a template" do
       describe "and the intended file exists" do
         describe "and the given filename includes the template file extension" do
-          let(:template_param) { File.join( fixture_path, "template_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
+          let(:template_param) { File.join( fixture_path, "template_param_template#{Jsonista::DSL::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
+            Jsonista::DSL::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
 
@@ -38,7 +38,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:template_param) { File.join( fixture_path, "template_param_template" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
+            Jsonista::DSL::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
       end
@@ -46,7 +46,7 @@ class Jsonista::RenderTest < Minitest::Spec
       describe "and the intended file does not exist" do
         it "returns the rendered template body from the file" do
           lambda do
-            Jsonista::Render.render( :template => "i_dont_exist" )
+            Jsonista::DSL::Render.render( :template => "i_dont_exist" )
           end.must_raise( Errno::ENOENT )
         end
       end
@@ -55,10 +55,10 @@ class Jsonista::RenderTest < Minitest::Spec
     describe "when rendering a partial" do
       describe "and the intended file exists" do
         describe "and the given filename includes the template file extension" do
-          let(:partial_param) { File.join( fixture_path, "partial_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
+          let(:partial_param) { File.join( fixture_path, "partial_param_template#{Jsonista::DSL::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
+            Jsonista::DSL::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
 
@@ -66,7 +66,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:partial_param) { File.join( fixture_path, "partial_param_template" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
+            Jsonista::DSL::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
       end
@@ -74,7 +74,7 @@ class Jsonista::RenderTest < Minitest::Spec
       describe "and the intended file does not exist" do
         it "returns the rendered template body from the file" do
           lambda do
-            Jsonista::Render.render( :partial => "i_dont_exist" )
+            Jsonista::DSL::Render.render( :partial => "i_dont_exist" )
           end.must_raise( Errno::ENOENT )
         end
       end
@@ -82,7 +82,7 @@ class Jsonista::RenderTest < Minitest::Spec
 
     describe "when rendering a string" do
       it "returns the rendered template body from the string" do
-        Jsonista::Render.render( :string => string_param ).must_equal( "string" ) 
+        Jsonista::DSL::Render.render( :string => string_param ).must_equal( "string" ) 
       end
     end
 
@@ -99,7 +99,7 @@ class Jsonista::RenderTest < Minitest::Spec
         describe "and also giving a :partial option" do
           it 'raises an error' do
             lambda do
-              Jsonista::Render.render( file_param, :partial => partial_param )
+              Jsonista::DSL::Render.render( file_param, :partial => partial_param )
             end.must_raise( Jsonista::NoTemplateError )
           end
         end
@@ -107,7 +107,7 @@ class Jsonista::RenderTest < Minitest::Spec
         describe "and also giving a :template option" do
           it 'raises an error' do
             lambda do
-              Jsonista::Render.render( file_param, :template => template_param )
+              Jsonista::DSL::Render.render( file_param, :template => template_param )
             end.must_raise( Jsonista::NoTemplateError )
           end
         end
@@ -115,14 +115,14 @@ class Jsonista::RenderTest < Minitest::Spec
         describe "and also giving a :string option" do
           it 'raises an error' do
             lambda do
-              Jsonista::Render.render( file_param, :string => string_param )
+              Jsonista::DSL::Render.render( file_param, :string => string_param )
             end.must_raise( Jsonista::NoTemplateError )
           end
         end
 
         describe "and giving no options" do
           it 'renders the contents of the template given by the file' do
-            Jsonista::Render.render( file_param ).must_equal( "file" )
+            Jsonista::DSL::Render.render( file_param ).must_equal( "file" )
           end
         end
       end
@@ -130,25 +130,25 @@ class Jsonista::RenderTest < Minitest::Spec
       describe "when not giving a file as parameter" do
         describe "but giving a :partial option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
+            Jsonista::DSL::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
 
         describe "but giving a :template option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
+            Jsonista::DSL::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
 
         describe "but giving a :string option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :string => string_param ).must_equal( "string" )
+            Jsonista::DSL::Render.render( :string => string_param ).must_equal( "string" )
           end
         end
 
         describe "and giving no options" do
           it 'raises an error' do
-            lambda { Jsonista::Render.render }.must_raise( Jsonista::NoTemplateError )
+            lambda { Jsonista::DSL::Render.render }.must_raise( Jsonista::NoTemplateError )
           end
         end
       end

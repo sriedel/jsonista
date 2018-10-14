@@ -1,5 +1,5 @@
 module Jsonista
-  class CachePlaceholder
+  class CachedValue
     attr_reader :key, :cache_miss_block
 
     def initialize( key, &cache_miss_block )

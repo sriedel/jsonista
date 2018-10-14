@@ -21,8 +21,8 @@ Jsonista::ExecutionEnvironment.class_eval do
   def self.build_new_environment
     Object.allocate.instance_eval do
       class << self
-        include Jsonista::Render
-        include Jsonista::Cache
+        include Jsonista::DSL::Render
+        include Jsonista::DSL::Cache
       end
 
       binding

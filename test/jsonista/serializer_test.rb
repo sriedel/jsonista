@@ -140,12 +140,12 @@ class Jsonista::SerializerTest < Minitest::Spec
       end
     end
 
-    describe "when passed a Jsonista::CachePlaceholder" do
+    describe "when passed a Jsonista::CachedValue" do
       let(:cache_key) { "my cache key" }
       let(:cache_miss_block) do
         lambda { "x" }
       end
-      let(:structure) { Jsonista::CachePlaceholder.new( cache_key, &cache_miss_block ) }
+      let(:structure) { Jsonista::CachedValue.new( cache_key, &cache_miss_block ) }
 
       it 'returns the resolved cache value' do
         result.must_equal( '"this value is cached"' )

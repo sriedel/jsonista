@@ -33,7 +33,7 @@ module Jsonista
           @serialized_string.chop! unless structure.empty?
           @serialized_string << "}"
 
-        when Jsonista::CachePlaceholder
+        when Jsonista::CachedValue
           @serialized_string << structure.resolve.to_json
         
         else
