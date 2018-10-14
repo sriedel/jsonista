@@ -10,6 +10,6 @@ describe "Rendering a template that in turn renders partials" do
   let(:expected_result) { expected_result_structure.to_json }
 
   it "should return the expected result" do
-    Jsonista::Render.render( main_template_path ).must_equal( expected_result )
+    Jsonista.render( main_template_path ).must_equal( expected_result )
   end
 end

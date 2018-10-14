@@ -19,7 +19,7 @@ class Jsonista::RenderTest < Minitest::Spec
 
       describe "and the given file exists" do
         it "returns the rendered template body from the file" do
-          Jsonista::Render.render( file_param ).must_equal( %{"file"} )
+          Jsonista::Render.render( file_param ).must_equal( "file" )
         end
       end
     end
@@ -30,7 +30,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:template_param) { File.join( fixture_path, "template_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :template => template_param ).must_equal( %{"template"} )
+            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
 
@@ -38,7 +38,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:template_param) { File.join( fixture_path, "template_param_template" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :template => template_param ).must_equal( %{"template"} )
+            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
       end
@@ -58,7 +58,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:partial_param) { File.join( fixture_path, "partial_param_template#{Jsonista::Render::TemplateResolver::TEMPLATE_FILE_EXTENSION}" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( %{"partial"} )
+            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
 
@@ -66,7 +66,7 @@ class Jsonista::RenderTest < Minitest::Spec
           let(:partial_param) { File.join( fixture_path, "partial_param_template" ) }
 
           it "returns the rendered template body from the file" do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( %{"partial"} )
+            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
       end
@@ -82,7 +82,7 @@ class Jsonista::RenderTest < Minitest::Spec
 
     describe "when rendering a string" do
       it "returns the rendered template body from the string" do
-        Jsonista::Render.render( :string => string_param ).must_equal( %{"string"} ) 
+        Jsonista::Render.render( :string => string_param ).must_equal( "string" ) 
       end
     end
 
@@ -122,7 +122,7 @@ class Jsonista::RenderTest < Minitest::Spec
 
         describe "and giving no options" do
           it 'renders the contents of the template given by the file' do
-            Jsonista::Render.render( file_param ).must_equal( %{"file"} )
+            Jsonista::Render.render( file_param ).must_equal( "file" )
           end
         end
       end
@@ -130,19 +130,19 @@ class Jsonista::RenderTest < Minitest::Spec
       describe "when not giving a file as parameter" do
         describe "but giving a :partial option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :partial => partial_param ).must_equal( %{"partial"} )
+            Jsonista::Render.render( :partial => partial_param ).must_equal( "partial" )
           end
         end
 
         describe "but giving a :template option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :template => template_param ).must_equal( %{"template"} )
+            Jsonista::Render.render( :template => template_param ).must_equal( "template" )
           end
         end
 
         describe "but giving a :string option" do
           it 'renders the contents of the template given by the option' do
-            Jsonista::Render.render( :string => string_param ).must_equal( %{"string"} )
+            Jsonista::Render.render( :string => string_param ).must_equal( "string" )
           end
         end
 

@@ -3,6 +3,11 @@ require 'json'
 module Jsonista
   class SerializationError < StandardError ; end
   class NoTemplateError < StandardError ; end
+
+  def self.render( *args )
+    structure = Render.render( *args )
+    Serializer.new.serialize( structure )
+  end
 end
 
 require_relative 'jsonista/execution_environment'

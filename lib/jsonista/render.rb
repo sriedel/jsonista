@@ -7,7 +7,6 @@ module Jsonista
         @file = file
         @caller_path = caller_path
         @is_partial = is_partial
-        STDERR.puts "Caller path: #{caller_path.inspect}"
       end
 
       def template_path
@@ -57,8 +56,7 @@ module Jsonista
                                end
 
       template_body = options[:string] || File.read( resolved_template_file )
-      structure = Compiler.new( template_body, resolved_template_file ).compile
-      Serializer.new.serialize( structure )
+      Compiler.new( template_body, resolved_template_file ).compile
     end
     module_function :render
   end
