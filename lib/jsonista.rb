@@ -8,6 +8,14 @@ module Jsonista
     structure = DSL::Render.render( *args )
     Serializer.new.serialize( structure )
   end
+
+  def self.cache=( cache )
+    @cache = cache
+  end
+
+  def self.cache
+    @cache
+  end
 end
 
 require_relative 'jsonista/execution_environment'

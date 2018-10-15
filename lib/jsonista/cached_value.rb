@@ -8,7 +8,15 @@ module Jsonista
     end
 
     def resolve
-      'this value is cached'
+      Jsonista.cache.fetch( key )
+
+    rescue Jsonista::Cache::UnknownKey
+      raise unless cache_miss_block
+
+      structure = cache_miss_block.call
+      serialized = Serializer.new.serialize( structure )
+      Jsonista.cache.store( key, serialized )
+      serialized
     end
   end
 end

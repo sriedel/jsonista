@@ -34,7 +34,7 @@ module Jsonista
           @serialized_string << "}"
 
         when Jsonista::CachedValue
-          @serialized_string << structure.resolve.to_json
+          @serialized_string << structure.resolve
         
         else
           raise SerializationError.new( "Don't know how to serialize an object of type #{structure.class} (context: #{@serialized_string[-200,200]}" )

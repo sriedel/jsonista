@@ -141,14 +141,55 @@ class Jsonista::SerializerTest < Minitest::Spec
     end
 
     describe "when passed a Jsonista::CachedValue" do
+      let(:existing_cache_value) { %{"x"} }
+      let(:new_cache_value) { "y" }
+      let(:initial_cache_state) { { cache_key => existing_cache_value } }
+      let(:cache) { Jsonista::Cache::InMemory.new( initial_cache_state ) }
       let(:cache_key) { "my cache key" }
       let(:cache_miss_block) do
-        lambda { "x" }
+        lambda { new_cache_value }
       end
       let(:structure) { Jsonista::CachedValue.new( cache_key, &cache_miss_block ) }
 
-      it 'returns the resolved cache value' do
-        result.must_equal( '"this value is cached"' )
+      before( :each ) do
+        Jsonista.cache = cache
+      end
+
+      after( :each ) do
+        Jsonista.cache = nil
+      end
+
+      describe 'when a value is already assigned to the key' do
+        it 'returns that value' do
+          result.must_equal( existing_cache_value )
+        end
+      end
+
+      describe 'when no value is assigned to the key' do
+        let(:initial_cache_state) { {} }
+
+        describe 'and a cache miss block is given' do
+          it 'returns the result of evaluating the cache_miss_block' do
+            result.must_equal( new_cache_value.to_json )
+          end
+
+          # TODO continue here! the cache should store strings, not structures as it currently does
+          #     CachedValue#resolve must compile its block and evaluate the result 
+          it 'caches the result of evaluating the cache_miss_block' do
+            result
+            Jsonista.cache.fetch( cache_key ).must_equal( new_cache_value.to_json )
+          end
+        end
+
+        describe 'and no cache miss block is given' do
+          let(:structure) { Jsonista::CachedValue.new( cache_key ) }
+
+          it 'raises an exception' do
+            lambda do
+              result
+            end.must_raise( Jsonista::Cache::UnknownKey )
+          end
+        end
       end
     end
 
