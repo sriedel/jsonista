@@ -59,7 +59,9 @@ module Jsonista
           compiler.compile( options[:locals] )
         end
       end
+      alias __render__ render
       module_function :render
+      module_function :__render__
     end
   end
 end
