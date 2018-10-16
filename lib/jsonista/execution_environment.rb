@@ -2,6 +2,10 @@ require 'byebug'
 
 module Jsonista
   class ExecutionEnvironment
+    def self.clear!
+      @environment = nil
+    end
+
     def self.get( local_variable_hash = nil )
       @environment ||= build_new_environment
       environment = @environment.dup
@@ -23,6 +27,7 @@ Jsonista::ExecutionEnvironment.class_eval do
       class << self
         include Jsonista::DSL::Render
         include Jsonista::DSL::Cache
+        Jsonista.helpers.each { |mod| include mod }
       end
 
       binding

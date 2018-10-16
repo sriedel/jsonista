@@ -47,5 +47,52 @@ class Jsonista::ExecutionEnvironmentTest < Minitest::Test
         result.eval( "y" ).must_equal( local_variables[:y] )
       end
     end
+
+    describe 'using helpers' do
+      before(:each) do
+        @original_helpers = Jsonista.helpers
+      end
+
+      after(:each) do
+        Jsonista.helpers = @original_helpers
+      end
+
+      describe 'adding a helper modules' do
+        let(:example_helper_1) do
+          Module.new do
+            def test_helper_1
+              "test helper 1 output"
+            end
+          end
+        end
+
+        let(:example_helper_2) do
+          Module.new do
+            def test_helper_2
+              "test helper 2 output"
+            end
+          end
+        end
+
+        it 'makes the helper modules methods available' do
+          Jsonista.helpers = [ example_helper_1 ]
+          Jsonista.render( :string => "test_helper_1" ).must_equal( %{"test helper 1 output"} )
+        end
+
+        it 'makes subsequently added helper methods available' do
+          Jsonista.helpers = [ example_helper_1 ]
+          Jsonista.helpers = [ example_helper_2 ]
+          Jsonista.render( :string => "test_helper_2" ).must_equal( %{"test helper 2 output"} )
+        end
+
+        it 'should clear the previously added helpers when setting new helpers' do
+          Jsonista.helpers = [ example_helper_1 ]
+          Jsonista.helpers = [ example_helper_2 ]
+          lambda do
+            Jsonista.render( :string => "test_helper_1" )
+          end.must_raise( NameError )
+        end
+      end
+    end
   end
 end

@@ -16,6 +16,16 @@ module Jsonista
   def self.cache
     @cache
   end
+
+  def self.helpers=( array_of_modules )
+    @helpers = array_of_modules
+    Jsonista::ExecutionEnvironment.clear!
+    @helpers
+  end
+
+  def self.helpers
+    @helpers ||= []
+  end
 end
 
 require_relative 'jsonista/execution_environment'
