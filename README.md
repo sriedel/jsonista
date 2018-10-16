@@ -90,11 +90,16 @@ is inserted in place of the cache call within the resulting json. Otherwise
 the contents of the passed block is compiled, serialized, stored in the cache
 and inserted in place fo the cache call.
 
+### Helpers
+Helper methods can be made available within templates by setting the modules 
+from which the helpers should be loaded.
+```
+  Jsonista.helpers = [ HelperModule1, HelperModule2 ]
+```
+Note: If you specify the helpers again, the previous helpers will be removed.
+
 ## TODOs
 - Check (user defined) objects left over after compilation for an #as\_json
   method and call that to compile the object.
 - Add more caches: NullCache, FileCache, RedisCache
 - Add a configuration system
-- Add a way to inject helpers into the template evaluation environment and 
-  rebuild the execution environment on demand.
-
