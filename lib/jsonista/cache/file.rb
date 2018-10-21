@@ -17,16 +17,16 @@ module Jsonista
       end
 
       def store( key, value )
-        key_cache_dir = ::File.dirname( path_for_key( key ) )
+        key_file = path_for_key( key )
+        key_cache_dir = ::File.dirname( key_file )
         FileUtils.mkdir_p( key_cache_dir )
-        ::File.write( path_for_key( key ), value )
+        ::File.write( key_file, value )
         value
       end
 
       def invalidate( *keys )
-        keys.each do |key|
-          ::File.unlink( path_for_key( key ) ) if ::File.exist?( path_for_key( key ) )
-        end
+        key_files = keys.map { |key| path_for_key( key ) }
+        FileUtils.rm( key_files, force: true )
       end
 
       def clear!
