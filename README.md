@@ -90,6 +90,35 @@ is inserted in place of the cache call within the resulting json. Otherwise
 the contents of the passed block is compiled, serialized, stored in the cache
 and inserted in place fo the cache call.
 
+#### Jsonista::Cache::Null
+Doesn't cache anything, and always executes the block given to the cache 
+directive. Useful if you want to use templates containing cache directives,
+but don't want to actually use a cache.
+
+#### Jsonista::Cache::InMemory
+Caches values in memory. The most simple to set up, and probably the fastest.
+However cached values cannot be shared across processes or servers.
+
+You can give the constructor a hash containing an initial cache state, if you
+want to start up the process with a pre-filled cache.
+
+#### Jsonista::Cache::File
+Caches values in files withing a cache directory. Each key will have its own
+file associated with it. Cache keys containing directory seperator characters
+will create the required subdirectories, so that the key reflects a path name
+under the cache root.
+
+*DANGER* Currently directory traversal attachs are possible, i.e. '/../' components
+of a cache key will move up a directory. Combined with the file writing operations,
+this can be extremely dangerous if you do not ensure that the cache key cannot
+contain '..' parts.
+
+You can give the constructor a path to use for the cache root directory. If
+none is given, the directory 'jsonista\_cache' under the current processes
+working directory will be used. It would be wise to supply an absolute path
+name here, otherwise file operations may happen in unexpected directories with
+unintended files!
+
 ### Helpers
 Helper methods can be made available within templates by setting the modules 
 from which the helpers should be loaded.
@@ -101,5 +130,5 @@ Note: If you specify the helpers again, the previous helpers will be removed.
 ## TODOs
 - Check (user defined) objects left over after compilation for an #as\_json
   method and call that to compile the object.
-- Add more caches: NullCache, FileCache, RedisCache
+- Add a redis cache
 - Add a configuration system
