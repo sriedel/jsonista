@@ -1,4 +1,5 @@
 require 'json'
+require 'fileutils'
 
 module Jsonista
   class SerializationError < StandardError ; end
@@ -37,3 +38,4 @@ require_relative 'jsonista/dsl/cache'
 require_relative 'jsonista/cache'
 require_relative 'jsonista/cache/null'
 require_relative 'jsonista/cache/in_memory'
+require_relative 'jsonista/cache/file'
